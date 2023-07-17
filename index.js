@@ -16,8 +16,9 @@ app.post("/api/task", async (req, res) => {
     await taskData.save();
     return res
       .status(200)
-      .json({ success: true, message: "Data Saved Successfully" });
+      .json({ success: true, message: "Task saved Successfully" });
   } catch (error) {
+    console.log(error);
     return res.status(401).json({ success: false, error: error.message });
   }
 });
@@ -27,6 +28,7 @@ app.get("/task", async (req, res) => {
     const taskData = await taskModel.find();
     return res.status(200).json({ success: true, data: taskData });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({ success: false, error: error.message });
   }
 });
