@@ -5,7 +5,7 @@ const taskSchema = new mongoose.Schema(
     task_Title: { type: String },
     task_Description: { type: String },
     task_Due_Date: { type: Date },
-    task_Status: { type: String, enum: ["To-Do", "On-Going", "Done"] },
+    task_Status: { type: String, enum: ["To-Do", "In-Progress", "Completed"] },
   },
   { timestamps: true }
 );
