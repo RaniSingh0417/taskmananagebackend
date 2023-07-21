@@ -7,10 +7,10 @@ app.use(express.json());
 app.post("/api/task", async (req, res) => {
   try {
     const newObject = {
-      task_Title: req.body.title,
-      task_Description: req.body.description,
-      task_Due_Date: req.body.date,
-      task_Status: req.body.status,
+      taskTitle: req.body.title,
+      taskDescription: req.body.description,
+      taskDueDate: req.body.date,
+      taskStatus: req.body.status,
     };
     const taskData = new taskModel(newObject);
     await taskData.save();
@@ -25,11 +25,39 @@ app.post("/api/task", async (req, res) => {
 
 app.get("/task", async (req, res) => {
   try {
-    const taskData = await taskModel.find();
+    const taskData = await taskModel.find().sort({ createdAt: -1 });
     return res.status(200).json({ success: true, data: taskData });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ success: false, error: error.message });
+  }
+});
+//Update
+app.put("/api/update/:id/:taskstatus", async (req, res) => {
+  try {
+    const taskupdate = await taskModel.updateOne(
+      { taskstatus: "To-Do" },
+      {
+        //       if(taskstatus="To-Do"){
+        // taskstatus="In-Progress";
+        //       }
+        //      else if(taskstatus="In-Progress")
+      }
+    );
+    console.log(taskupdate);
+    return res.json({ success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(403).json({ success: false, error: error.message });
+  }
+});
+
+app.delete("/api/delete/:id", async (req, res) => {
+  try {
+    const task = await taskModel.findByIdAndDelete(req.params.id);
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    return res.status(404).json({ success: false });
   }
 });
 
