@@ -35,15 +35,9 @@ app.get("/task", async (req, res) => {
 //Update
 app.put("/api/update/:id/:taskstatus", async (req, res) => {
   try {
-    const taskupdate = await taskModel.updateOne(
-      { taskstatus: "To-Do" },
-      {
-        //       if(taskstatus="To-Do"){
-        // taskstatus="In-Progress";
-        //       }
-        //      else if(taskstatus="In-Progress")
-      }
-    );
+    const taskupdate = await taskModel.findByIdAndUpdate(req.params.id, {
+      taskStatus: req.params.taskstatus,
+    });
     console.log(taskupdate);
     return res.json({ success: true });
   } catch (error) {
@@ -52,7 +46,7 @@ app.put("/api/update/:id/:taskstatus", async (req, res) => {
   }
 });
 
-app.delete("/api/delete/:id", async (req, res) => {
+app.delete("/api/delete/:id/:taskstatus", async (req, res) => {
   try {
     const task = await taskModel.findByIdAndDelete(req.params.id);
     return res.status(200).json({ success: true });
