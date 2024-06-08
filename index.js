@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const taskModel = require("./models/task");
+const path = require("path");
 const { connectDatabase } = require("./connection/file");
 app.use(express.json());
 
@@ -46,7 +47,7 @@ app.put("/api/update/:id/:taskstatus", async (req, res) => {
   }
 });
 
-app.delete("/api/delete/:id/:taskstatus", async (req, res) => {
+app.delete("/api/delete/:id", async (req, res) => {
   try {
     const task = await taskModel.findByIdAndDelete(req.params.id);
     return res.status(200).json({ success: true });
@@ -55,8 +56,21 @@ app.delete("/api/delete/:id/:taskstatus", async (req, res) => {
   }
 });
 
+const PORT = process.env.PORT || 5000;
 connectDatabase();
-const PORT = 4000;
+
+app.use(express.static("client/build"));
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.resolve(__dirname + "/client/build/index.html"),
+    function (err) {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
+});
+
 app.listen(PORT, async () => {
   await console.log(`Server is running at Port ${PORT}`);
 });
