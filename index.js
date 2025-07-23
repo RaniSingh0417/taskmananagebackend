@@ -3,7 +3,10 @@ const app = express();
 const taskModel = require("./models/task");
 const path = require("path");
 const { connectDatabase } = require("./connection/file");
+const planRoute = require("./routes/planRoute");
+
 app.use(express.json());
+app.use("/api/plan-day", planRoute);
 
 app.post("/api/task", async (req, res) => {
   try {
